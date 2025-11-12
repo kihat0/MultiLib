@@ -19,6 +19,20 @@ class post(models.Model):
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name='Статус')
     published = PubishedManager()
 
+class book(models.Model):
+    class BookStatus(models.TextChoices):
+        DRAFT = 'DF', 'Черновик'
+        PUBLISHED = 'PB', 'Опубликовано'
+    b_title = models.CharField(max_length=100, verbose_name='Название книги')
+    b_slug = models.SlugField(max_length=100, verbose_name='Метка книги')
+    b_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', verbose_name='Автор книги')
+    b_body = models.TextField(verbose_name='Содержание книги')
+    b_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
+    b_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    b_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
+    b_status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name='Статус')
+    b_published = PubishedManager()
+
     class Meta:
         orderind = ('-publish')
         indexes = [
@@ -29,5 +43,6 @@ class post(models.Model):
         
     def __str__(self):
         return self.title
+
 
 
