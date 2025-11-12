@@ -19,6 +19,18 @@ class post(models.Model):
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name='Статус')
     published = PubishedManager()
 
+    class Meta:
+        orderind = ('-publish')
+        indexes = [
+            models.Index(fields=['-publish']),
+             ]
+        verbose_name='Пост'
+        verbose_name_plural='Посты'
+        
+    def __str__(self):
+        return self.title
+
+
 class book(models.Model):
     class BookStatus(models.TextChoices):
         DRAFT = 'DF', 'Черновик'
@@ -38,11 +50,12 @@ class book(models.Model):
         indexes = [
             models.Index(fields=['-publish']),
             ]
-        verbose_name='Пост'
-        verbose_name_plural='Посты'
+        verbose_name='Книга'
+        verbose_name_plural='Книги'
         
     def __str__(self):
         return self.title
+
 
 
 
