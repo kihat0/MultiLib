@@ -58,11 +58,10 @@ class Book(models.Model):
 
 class Commentary(models.Model):
     class Comm(models.TextChoices):
-        PUBLISHED = 'PB'
+        PUBLISHED = 'PB', 'Опубликован'
     c_body = models.TextField(verbose_name='комментарий')     
     c_published = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
-    с_create = models.DateTimeField(auto_naw=True, verbose_name='Дата создания')
-    
-
-
-
+    с_create = models.DateTimeField(auto_now=True, verbose_name='Дата создания')
+    c_update = models.DateTimeField(auto_now_add=True, verbose_name='Дата обновления')
+    c_status = models.CharField(max_length=2, choices=Status.choices, verbose_name='Статус')
+    c_author = models.ForeignKey(User, related_name='comm', verbose_name='Автор')
