@@ -75,4 +75,5 @@ class Commentary(models.Model):
          verbose_name_plural='Комметарии'
 
      def __str__(self):
-         return self.tittle
+         return self.title
+
