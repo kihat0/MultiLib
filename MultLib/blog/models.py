@@ -65,3 +65,14 @@ class Commentary(models.Model):
     c_update = models.DateTimeField(auto_now_add=True, verbose_name='Дата обновления')
     c_status = models.CharField(max_length=2, choices=Status.choices, verbose_name='Статус')
     c_author = models.ForeignKey(User, related_name='comm', verbose_name='Автор')
+
+     class Meta:
+         ordering = ('-publish')
+         indexes = [
+             models.Index(fields=['-publish']),
+             ]
+         verbose_name='Комментарии'
+         verbose_name_plural='Комметарии'
+
+     def __str__(self):
+         return self.tittle
