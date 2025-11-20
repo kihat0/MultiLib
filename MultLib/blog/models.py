@@ -59,8 +59,10 @@ class Book(models.Model):
 class Commentary(models.Model):
     class Comm(models.TextChoices):
         PUBLISHED = 'PB'
-
-
+    c_body = models.TextField(verbose_name='комментарий')     
+    c_published = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
+    с_create = models.DateTimeField(auto_naw=True, verbose_name='Дата создания')
+    
 
 
 
