@@ -31,8 +31,8 @@ class Post(models.Model):
         return self.title
 
 
-class Book(models.Model):
-    class BookStatus(models.TextChoices):
+class BookWrite(models.Model):
+    class BookWriteStatus(models.TextChoices):
         DRAFT = 'DF', 'Черновик'
         PUBLISHED = 'PB', 'Опубликовано'
     b_title = models.CharField(max_length=100, verbose_name='Название книги')
@@ -42,7 +42,12 @@ class Book(models.Model):
     b_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     b_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     b_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    b_status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name='Статус')
+    b_status = models.CharField(max_length=2, choices=Status.choices, default=BookWriteStatus.DRAFT, verbose_name='Статус')
+    b_cover = models.ImageField('cover/', verbose_name='Обложка', blank=True, null=True)
+    b_pages = models.SmallPositiveIntegerField(verbose_name='Количество страниц', default=0)
+    b_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
+    b_description = models.TextField(verbose_name='Описание книги')
+    b_age = models.SmallPositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     b_published = PubishedManager()
 
     class Meta:
@@ -54,7 +59,7 @@ class Book(models.Model):
         verbose_name_plural='Книги'
         
     def __str__(self):
-        return self.title
+        return self.b_title
 
 class Commentary(models.Model):
     class Comm(models.TextChoices):
@@ -76,4 +81,3 @@ class Commentary(models.Model):
 
      def __str__(self):
          return self.title
-
