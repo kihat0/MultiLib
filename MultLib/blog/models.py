@@ -66,7 +66,7 @@ class BookWrite(models.Model):
     bw_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     bw_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     bw_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    bw_status = models.CharField(max_length=2, choices=Status.choices, default=BookWriteStatus.DRAFT, verbose_name='Статус')
+    bw_status = models.CharField(max_length=2, choices=BookWriteStatus.choices, default=BookWriteStatus.DRAFT, verbose_name='Статус')
     bw_cover = models.ImageField('cover/', verbose_name='Обложка', blank=True, null=True)
     bw_pages = models.SmallPositiveIntegerField(verbose_name='Количество страниц', default=0)
     bw_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
@@ -102,5 +102,6 @@ class Commentary(models.Model):
 
     def __str__(self):
         return self.title
+
 
 
