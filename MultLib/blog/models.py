@@ -17,7 +17,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     status = models.CharField(max_length=2, choices=Status.choices, default=Status.DRAFT, verbose_name='Статус')
-    published = PubishedManager()
+    published = PublishedManager()
 
     class Meta:
         orderind = ('-publish')
@@ -72,7 +72,7 @@ class BookWrite(models.Model):
     bw_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     bw_description = models.TextField(verbose_name='Описание книги')
     bw_age = models.SmallPositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
-    bw_published = PubishedManager()
+    bw_published = PublishedManager()
 
     class Meta:
         orderind = ('-bw_publish')
@@ -90,9 +90,9 @@ class Commentary(models.Model):
     c_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     c_update = models.DateTimeField(auto_now_add=True, verbose_name='Дата обновления')
     c_author = models.ForeignKey(User, related_name='comm', verbose_name='Автор')
-    c_published = PubishedManager()
+    c_published = PublishedManager()
 
-     class Meta:
+    class Meta:
          ordering = ('-c_publish')
          indexes = [
              models.Index(fields=['-c_publish']),
@@ -100,6 +100,7 @@ class Commentary(models.Model):
          verbose_name='Комментарии'
          verbose_name_plural='Комметарии'
 
-     def __str__(self):
-         return self.title
+    def __str__(self):
+        return self.title
+
 
