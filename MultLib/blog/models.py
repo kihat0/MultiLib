@@ -20,7 +20,7 @@ class Post(models.Model):
     published = PublishedManager()
 
     class Meta:
-        orderind = ('-publish')
+        orderind = ['-publish']
         indexes = [
             models.Index(fields=['-publish']),
              ]
@@ -37,15 +37,15 @@ class Book(models.Model):
     b_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     b_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     b_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    b_cover = models.ImageField('cover/', verbose_name='Обложка', blank=True, null=True)
-    b_pages = models.SmallPositiveIntegerField(verbose_name='Количество страниц', default=0)
+    b_cover = models.ImageField('cover/', blank=True, null=True)
+    b_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     b_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     b_description = models.TextField(verbose_name='Описание книги')
-    b_age = models.SmallPositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
+    b_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, db_index=True, verbose_name='ISBN')
 
     class Meta:
-        orderind = ('-b_publish')
+        orderind = ['-b_publish']
         indexes = [
             models.Index(fields=['-b_publish']),
             ]
@@ -67,20 +67,20 @@ class BookWrite(models.Model):
     bw_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     bw_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     bw_status = models.CharField(max_length=2, choices=BookWriteStatus.choices, default=BookWriteStatus.DRAFT, verbose_name='Статус')
-    bw_cover = models.ImageField('cover/', verbose_name='Обложка', blank=True, null=True)
-    bw_pages = models.SmallPositiveIntegerField(verbose_name='Количество страниц', default=0)
+    bw_cover = models.ImageField('cover/', blank=True, null=True)
+    bw_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     bw_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     bw_description = models.TextField(verbose_name='Описание книги')
-    bw_age = models.SmallPositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
+    bw_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     bw_published = PublishedManager()
 
     class Meta:
-        orderind = ('-bw_publish')
+        orderind = ['-bw_publish']
         indexes = [
             models.Index(fields=['-bw_publish']),
             ]
-        verbose_name='Книга'
-        verbose_name_plural='Книги'
+        verbose_name='Книга пользователя'
+        verbose_name_plural='Книги пользователей'
         
     def __str__(self):
         return self.bw_title
@@ -89,11 +89,11 @@ class Commentary(models.Model):
     c_body = models.TextField(verbose_name='комментарий')     
     c_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     c_update = models.DateTimeField(auto_now_add=True, verbose_name='Дата обновления')
-    c_author = models.ForeignKey(User, related_name='comm', verbose_name='Автор')
+    c_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comm', verbose_name='Автор')
     c_published = PublishedManager()
 
     class Meta:
-         ordering = ('-c_publish')
+         ordering = ['-c_publish']
          indexes = [
              models.Index(fields=['-c_publish']),
              ]
@@ -101,7 +101,8 @@ class Commentary(models.Model):
          verbose_name_plural='Комметарии'
 
     def __str__(self):
-        return self.title
+        return self.c_author
+
 
 
 
