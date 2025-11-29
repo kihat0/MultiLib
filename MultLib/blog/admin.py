@@ -15,7 +15,7 @@ class PostAdmin(admin.ModelAdmin):
   prepopulated_fields = {'slug': ('title',)}
 
 @admin.register(Book)
-class BookAdmin:
+class BookAdmin(admin.ModelAdmin):
   list_display = ['b_title', 'b_author', 'b_publish', 'b_status', 'b_slug']
   list_filter = ['b_author', 'b_publish', 'b_created', 'isbn', 'b_age']
   search_fields = ['b_title', 'b_body']
@@ -25,7 +25,7 @@ class BookAdmin:
   prepopulated_fields = {'b_slug': ('b_title',)}
 
 @admin.register(BookWrite)
-class BookWriteAdmin:
+class BookWriteAdmin(admin.ModelAdmin):
   list_display = ['bw_title', 'bw_author', 'bw_publish', 'bw_status', 'bw_slug']
   list_filter = ['bw_author', 'bw_publish', 'bw_created', 'bw_age']
   search_fields = ['bw_title', 'bw_body']
@@ -33,3 +33,4 @@ class BookWriteAdmin:
   ordering = ['bw_publish']
   raw_id_fields = ['bw_author']
   prepopulated_fields = {'bw_slug': ('bw_title',)}
+
