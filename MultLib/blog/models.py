@@ -20,7 +20,7 @@ class Post(models.Model):
     published = PublishedManager()
 
     class Meta:
-        orderind = ['-publish']
+        ordering = ['-publish']
         indexes = [
             models.Index(fields=['-publish']),
              ]
@@ -31,9 +31,12 @@ class Post(models.Model):
         return self.title
 
 class Book(models.Model):
+    class BookStatus(models.TextChoices):
+        PUBLISHED = 'PB', 'Опубликовано'
     b_title = models.CharField(max_length=150, db_index=True, verbose_name='Название книги')
     b_slug = models.SlugField(max_length=150, db_index=True, verbose_name='Метка книги')
     b_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_books', db_index=True, verbose_name='Автор книги')
+    b_status = models.CharField(max_length=0, choices=BookStatus.Choices, default=BookStatus.PUBLISHED, verbose_name='Статус')
     b_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     b_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     b_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
@@ -45,7 +48,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, db_index=True, verbose_name='ISBN')
 
     class Meta:
-        orderind = ['-b_publish']
+        ordering = ['-b_publish']
         indexes = [
             models.Index(fields=['-b_publish']),
             ]
@@ -75,7 +78,7 @@ class BookWrite(models.Model):
     bw_published = PublishedManager()
 
     class Meta:
-        orderind = ['-bw_publish']
+        ordering = ['-bw_publish']
         indexes = [
             models.Index(fields=['-bw_publish']),
             ]
@@ -93,15 +96,16 @@ class Commentary(models.Model):
     c_published = PublishedManager()
 
     class Meta:
-         ordering = ['-c_publish']
-         indexes = [
-             models.Index(fields=['-c_publish']),
-             ]
-         verbose_name='Комментарии'
-         verbose_name_plural='Комметарии'
+        ordering = ['-c_publish']
+        indexes = [
+            models.Index(fields=['-c_publish']),
+            ]
+        verbose_name='Комментарии'
+        verbose_name_plural='Комметарии'
 
     def __str__(self):
         return self.c_author
+
 
 
 
