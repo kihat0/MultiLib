@@ -26,11 +26,12 @@ class BookAdmin(admin.ModelAdmin):
 
 @admin.register(BookWrite)
 class BookWriteAdmin(admin.ModelAdmin):
-  list_display = ['bw_title', 'bw_author', 'bw_publish', 'bw_status', 'bw_slug']
+  list_display = ['bw_title', 'bw_author', 'bw_publish', 'bw_slug']
   list_filter = ['bw_author', 'bw_publish', 'bw_created', 'bw_age']
   search_fields = ['bw_title', 'bw_body']
   date_hierarchy = 'bw_publish'
   ordering = ['bw_publish']
   raw_id_fields = ['bw_author']
   prepopulated_fields = {'bw_slug': ('bw_title',)}
+
 
