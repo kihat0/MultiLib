@@ -5,6 +5,15 @@ from django.contrib.auth.models import User
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Post.Status.PUBLISHED)
+
+class PublishedManagerBook(models.Manager):
+    def get_queryset_b(self):
+        return super().get_queryset().filter(status=Book.BookStatus.PUBLISHED)
+    
+class PublishedManagerBookWrite(models.Manager):
+    def get_queryset_bw(self):
+        return super().get_queryset().filter(status=BookWrite.BookWriteStatus.PUBLISHED)
+        
 class Post(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'DF', 'Черновик'
@@ -46,6 +55,7 @@ class Book(models.Model):
     b_description = models.TextField(verbose_name='Описание книги')
     b_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, db_index=True, verbose_name='ISBN')
+    b_published = PublishedManagerBook()
 
     class Meta:
         ordering = ['-b_publish']
@@ -75,7 +85,7 @@ class BookWrite(models.Model):
     bw_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     bw_description = models.TextField(verbose_name='Описание книги')
     bw_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
-    bw_published = PublishedManager()
+    bw_published = PublishedManagerBookWrite()
 
     class Meta:
         ordering = ['-bw_publish']
@@ -105,8 +115,4 @@ class Commentary(models.Model):
 
     def __str__(self):
         return self.c_author
-
-
-
-
-
+        
