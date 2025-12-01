@@ -16,5 +16,13 @@ def book_list(request):
   return render(request, 'blog/book/list.html', {'books': books})
 
 def book_detail(request, id):
-  book = get_object_or_404(Book, id=id, status=Book.Status.PUBLISHED)
+  book = get_object_or_404(Book, id=id, status=Book.BookStatus.PUBLISHED)
   return render(request, 'blog/book/detail.html', {'book': book})
+
+def book_write_list(request):
+  books_write = BookWrite.bw_published.all()
+  return render(request, 'blog/book_write/list.html', {'books_write': books_write})
+
+def book_write_detail(request, id):
+  book_write = get_object_or_404(BookWrite, id=id, status=BookWrite.BookWriteStatus.PUBLISHED)
+  return render(request, 'blog/book_write/detail.html', {'book_write': book_write})
