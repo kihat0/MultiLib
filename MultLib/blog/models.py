@@ -54,7 +54,8 @@ class Book(models.Model):
     b_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     b_description = models.TextField(verbose_name='Описание книги')
     b_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
-    isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, db_index=True, verbose_name='ISBN')
+    b_genre = models.ManyToManyField(Genre, related_name='Genre', verbose_name='Жанр')
+    isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, verbose_name='ISBN')
     b_published = PublishedManagerBook()
 
     class Meta:
@@ -85,6 +86,7 @@ class BookWrite(models.Model):
     bw_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     bw_description = models.TextField(verbose_name='Описание книги')
     bw_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
+    bw_genre = models.ManyToManyField(Genre, related_name='Genre', verbose_name='Жанр')
     bw_published = PublishedManagerBookWrite()
 
     class Meta:
@@ -97,6 +99,20 @@ class BookWrite(models.Model):
         
     def __str__(self):
         return self.bw_title
+
+class Genre(models.Model):
+    g_title = models.CharField(max_length=66, unique=True, verbose_name='Название жанра')
+    g_slug = models.SlugField(max_length=66, unique=True, verbose_name='Метка жанра')
+    g_description = models.TextField(blank=True, verbose_name='Описание жанра')
+
+    class Meta:
+        ordering = ['g_title']
+        verbose_name='Жанр'
+        verbose_name_plural='Жанры'
+
+    def __str__(self):
+        return self.g_title
+    
 
 class Commentary(models.Model):
     c_body = models.TextField(verbose_name='комментарий')     
@@ -116,3 +132,4 @@ class Commentary(models.Model):
     def __str__(self):
         return self.c_author
         
+
