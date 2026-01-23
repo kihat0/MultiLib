@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from .models import Post
 from .models import Book
+from .models import UserBook
+from .models import Rating
 from django.http import Http404
+from django.db.models import Avg
+from django.db.models.functions import Coalesce
 
 def post_list(request):
   posts = Post.published.all()
@@ -12,17 +16,19 @@ def post_detail(request, id):
   return render(request, 'blog/post/detail.html', {'post': post})
 
 def book_list(request):
-  books = Book.b_published.all()
+  books = Book.book_published.all()
   return render(request, 'blog/book/list.html', {'books': books})
 
 def book_detail(request, id):
   book = get_object_or_404(Book, id=id, status=Book.BookStatus.PUBLISHED)
-  return render(request, 'blog/book/detail.html', {'book': book})
+  avg =  book.book_rating.aggregate(avarage = Coalesce(Avg('rating'), 0))['avarage']
+  avg = round(avg, 1)
+  return render(request, 'blog/book/detail.html', {'book': book, 'avg': avg})
 
 def book_write_list(request):
-  books_write = BookWrite.bw_published.all()
-  return render(request, 'blog/book_write/list.html', {'books_write': books_write})
+  user_books = UserBook.user_book_published.all()
+  return render(request, 'blog/book_write/list.html', {'user_books': user_books})
 
 def book_write_detail(request, id):
-  book_write = get_object_or_404(BookWrite, id=id, status=BookWrite.BookWriteStatus.PUBLISHED)
-  return render(request, 'blog/book_write/detail.html', {'book_write': book_write})
+  user_book = get_object_or_404(UserBook, id=id, status=UserBook.UserBookStatus.PUBLISHED)
+  return render(request, 'blog/book_write/detail.html', {'user_book': user_book})
