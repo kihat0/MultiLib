@@ -42,4 +42,5 @@ def add_book(request):
       return redirect('book_list')
   else:
     form = UserBookForm()
-    return render(request, 'blog/add_book.html', {'form': form})
+    return render(request, 'blog/add_book/add_book.html', {'form': form})
+
