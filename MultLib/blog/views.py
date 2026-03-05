@@ -35,12 +35,16 @@ def user_book_detail(request, id):
   return render(request, 'blog/user_book/detail.html', {'user_book': user_book})
 
 def add_book(request):
-  if request.method == 'POST':
-    form = UserBookForm(request.POST)
-    if form.is_valid():
-      form.save()
-      return redirect('book_list')
-  else:
-    form = UserBookForm()
-    return render(request, 'blog/add_book/add_book.html', {'form': form})
-
+    if request.method == 'POST':
+        form = UserBookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            select_genre = form.cleaned_data['genres']
+            return redirect(reverse('book_list'))
+    else:
+        form = UserBookForm()
+        return render(request, 'blog/user_book/add_book/add_book.html', {'form': form})
+        #return redirect(reverse('add_book'))
+    
+def index(request):
+    return render(request, 'blog/Main_Page/index.html')
