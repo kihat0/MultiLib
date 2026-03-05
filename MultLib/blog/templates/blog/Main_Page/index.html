@@ -1,0 +1,125 @@
+{% extends "blog/base.html" %}
+<!DOCTYPE html>
+{% block index %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilib</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/Normalize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/style.css' %}">
+    
+</head>
+<body>
+    <header class="header">
+        <img src="{% static 'blog/images/png/логотип светится.png' %}" alt="" class="Logo">
+        <a href="#!" class="burger"><img src="{% static 'blog/images/png/burger.png' %}" alt=""></a>
+        <a href="#!" class="fon"><img src="{% static 'blog/images/png/theme_switch.png' %}" alt=""></a>
+
+        <div class="convenience">
+            <a href="{% url 'blog:add_book' %}" class="to_write_a_book"><img src="{% static 'blog/images/png/write_book.png' %}" alt=""></a>
+            <a href="#!" class="book_manga_switch"><img src="{% static 'blog/images/png/манга.png' %}" alt="">
+            <a href="#!" class="bookmark"><img src="{% static 'blog/images/png/закладка.png' %}" alt=""></a>
+            <a href="#!" class="genre_selection"><img src="{% static 'blog/images/png/выбор жанра.png' %}" alt=""></a>
+            <input type="text" class="search_bar">
+        </div>
+
+
+        <nav class="header__nav">
+            <hr>
+                <ul class="header__list">
+                    <li><a href="#!">Подборки</a></li>
+                    <li><a href="#!">Каталог</a></li>
+                    <li><a href="#!">Популярное</a></li>
+                    <li><a href="#!">Подписка</a></li>
+                    <li><a href="#!">Эксклюзив</a></li>
+                    <li><a href="#!">Черновики</a></li>
+                    <li><a href="#!">Аудиокниги</a></li>
+                    <li><a href="#!">Посты</a></li>
+                    <li><a href="#!">Стать автором</a></li>
+                </ul>
+            <hr>
+        </nav>
+    </header>
+    <main class="main">
+
+        <section class="new">
+            <p class="title">Новинки</p>
+            <div class="container">
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+            </div>
+        </section>
+
+        <section class="Continue_reading">
+            <p class="title">Продолжить чтение</p>
+            <div class="container">
+                <a href="#!" class="book"></a>
+                <p>Название<br>Номер страницы</p>
+                <a href="#!" class="book"></a>
+                <p>Название<br>Номер страницы</p>
+                <a href="#!" class="book"></a>
+                <p>Название<br>Номер страницы</p>
+            </div>
+        </section>
+
+        <section class="Rekomenduem">
+            <p class="title">Рекомендуем</p>
+            <div class="container">
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+            </div>
+        </section>
+
+        <section class="Popular">
+            <p class="title">Популярное</p>
+            <div class="container">
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+            </div>
+        </section>
+
+        <section class="Popular_genres">
+            <p class="title">Популярные жанры</p>
+            <div class="container">
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+                <a href="#!" class="book"></a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <hr>
+        <div class="container">
+            <a href="#!" class="telega"><img src="{% static 'blog/images/png/значок тг.png' %}" alt="Телеграмм"></a>
+                <div>
+                    <p>В случае, если авторские права нарушены - обращаться на почту MultiLib@gmail.com</p>
+                    <div class="contacts">
+                        <p>О нас</p>
+                        <p>Условия пользования</p>
+                        <p>Политика конфиденциальности </p>
+                    </div>
+                </div>
+            <img src="{% static 'blog/images/png/упоротая надпись.png' %}" alt="">
+        </div>
+    </footer>
+
+</body>
+</html>
+{% endblock %}

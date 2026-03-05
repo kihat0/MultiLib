@@ -1,0 +1,32 @@
+{% extends "blog/base.html" %}
+{% block add_book %}
+<form method="post" action="{% url 'blog:add_book' %}">
+    {% csrf_token %}
+    <div class="forms">
+        {{form.user_book_title.errors}}
+        <label for="{{ form.user_book_title.id_for_label }}">{{form.user_book_title.label}}</label>
+        {{form.user_book_title}}
+    </div>
+    <div class="forms_description">
+        {{form.user_book_descriptiom.errors}}
+        <label for="{{ form.user_book_description.id_for_label }}">{{form.user_book_description.label}}</label>
+        {{form.user_book_description}}
+    </div>
+    <div class="forms_genre">
+        {{form.user_book_genre.errors}}
+        <label for="{{ form.user_book_genre.id_for_label }}">{{form.user_book_genre.label}}</label>
+        {{form.user_book_genre}}
+    </div>
+    <div class="forms_age">
+        {{form.user_book_age.errors}}
+        <label for="{{ form.user_book_age.id_for_label }}">{{form.user_book_age.label}}</label>
+        {{form.user_book_age}}
+    </div>
+    <div class="forms_status">
+        {{form.user_book_status.errors}}
+        <label for="{{ form.user_book_status.id_for_label }}">{{form.user_book_status.label}}</label>
+        {{form.user_book_status}}
+    </div>
+    <button type="submit" class="btn">Сохранить</button>
+</form>
+{% endblock %}

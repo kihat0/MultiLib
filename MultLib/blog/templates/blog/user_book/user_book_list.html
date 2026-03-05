@@ -1,0 +1,18 @@
+{% extends "blog/base.html" %}
+{% block title %}MultiLib{% endblock %}
+{% block user_book_list %}
+    <h1 class="mb-4">MultiLib</h1>
+    {% for form in forms %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <a href="{ user_book.get_absolute_url }">{{ user_book.user_book_title }}</a>
+                </h2>
+                <p class="card-text date">
+                    Published {{ user_book.user_book_publish }} by {{ user_book.user_book_author }}
+                </p>
+                {{ user_book.user_book_description|truncatewords:30|linebreaks }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
