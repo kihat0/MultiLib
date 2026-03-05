@@ -29,8 +29,13 @@ class UserBookForm(forms.ModelForm):
                                                     'placeholder': 'Текст книги...'}),
                     'user_book_age': forms.NumberInput(attrs={'min': '0', 'max': '18',
                                                     'placeholder': 'Возрастное ограничение: 0-18 лет'}),
-                    'user_book_genre': forms.CheckboxSelectMultiple(choices=[(g.genre_slug, g.genre_title) for g in Genre.objects.all()]),
+                    'user_book_genre': forms.CheckboxSelectMultiple(choices=[
+                        (g.genre_slug, g.genre_title) for g in Genre.objects.all()
+                        ]),
+                    'user_book_pages': forms.TextInput(attrs={'class': 'form-control',
+                                                                'placeholder': 'Количество страниц....'}),
                     }
+        
         labels = {'user_book_title': 'Название книги',
                   'user_book_cover': 'Обложка',
                   'user_book_author': 'Автор книги',
@@ -43,6 +48,7 @@ class UserBookForm(forms.ModelForm):
                   'user_book_language': 'Язык книги',
                   'user_book_age': 'Возрастная категория',
                   }
+        
         error_messages = {'user_book_title': {
             'max_length': 'Слишком длинное название!'
             },
