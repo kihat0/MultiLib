@@ -1,0 +1,170 @@
+@font-face {
+font-family: Holtwood One SC;
+src: url(blog/fonts/HoltwoodOneSC-Regular.woff);
+}
+
+body {
+background-image: url(blog/images/svg/Group2.svg);
+color: #fff; 
+background-repeat: no-repeat;
+background-size: cover;
+}
+
+a {
+color: #fff;
+text-decoration: none;
+}
+
+ul {
+list-style: none;
+}
+
+.container {
+display: flex;
+height: 282px;
+justify-content: center;
+gap: 40px;
+align-items: center;
+}
+
+header {
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+}
+
+header .burger {
+position: absolute;
+top: 15px;
+right: 20px;
+z-index: 10;
+width: 73px;
+height: 41px;
+}
+
+.burger:hover {
+opacity: 0.5;
+}
+
+.fon {
+position: absolute;
+top: -25px;
+left: -20px;
+z-index: 10;
+max-width: 173px;
+max-height: 118px;
+}
+
+.convenience {
+width: 100%;
+display: flex;
+justify-content: flex-start;
+gap: 30px;
+align-items: center;
+}
+
+.search_bar {
+position: absolute;
+width: 723px;
+height: 33px;
+top: auto;
+right: 25px;
+border-radius: 30px;
+}
+
+.header__nav {
+width: 100%;
+}
+
+.header__list {
+display: flex;
+gap: 30px;
+padding: 0;
+justify-content: center;
+}
+
+.header__list a:hover {
+opacity: 0.7;
+transition: 0.4s;
+}
+
+/*main {
+padding: 0px 220px;
+} */
+
+.new .book {
+background: #fff;
+width: 180px;
+height: 280px;
+border-radius: 10px;
+}
+
+p.title {
+font-family: 'Holtwood One SC';
+font-size: 39px;
+line-height: 63px;
+margin: 10px;
+height: 63px;
+width: 171px;
+margin: 15px;
+}
+
+.Continue_reading .container {
+gap: 50px;
+align-items: flex-start;
+}
+
+.Continue_reading .title {
+min-width: 389px;
+}
+
+.Continue_reading .book {
+width: 130px;
+height: 202px;
+background: #fff;
+border-radius: 10px;
+}
+
+.Continue_reading .container p {
+font-size: 24px;
+}
+
+.Rekomenduem .book {
+background: #fff;
+width: 180px;
+height: 280px;
+border-radius: 10px;
+gap: 30px;
+}
+
+.Popular .book{
+background: #fff;
+width: 180px;
+height: 280px;
+border-radius: 10px;
+gap: 30px;  
+}
+
+.Popular .container{
+height: 400px;
+align-items: flex-start;
+}
+
+.Popular_genres .title {
+line-height: 140px;
+width: 420px;
+}
+
+.Popular_genres .book {
+background: #fff;
+width: 250px;
+height: 175px;
+border-radius: 20px;
+gap: 20px;
+}
+
+footer .contacts {
+display: flex;
+justify-content: space-between;
+}
