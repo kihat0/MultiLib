@@ -198,6 +198,11 @@ class Commentary_Book_Write(models.Model):
 
     def __str__(self):
         return f'Комментарий от {self.comment_user_book_author}'
+    
+class Edit_Profile(models.Model):
+    nickname = models.CharField(max_length=30, verbose_name='Никнейм')
+    avatar = models.ImageField('cover/', blank=True, null=True, verbose_name='Сменить аватар')
+    birthday = models.DateField(auto_now_add=True, verbose_name='Дата рождения')
         
 
 
