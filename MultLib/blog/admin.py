@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django import forms
+from .services import parsing
 from .models import Post
 from .models import Book
 from .models import UserBook
@@ -6,7 +8,16 @@ from .models import Genre
 from .models import Commentary_Book
 from .models import Commentary_Book_Write
 from .models import Rating
-from .models import Author
+from .models import Author, Edit_Profile
+
+class BookAdminForm(admin.ModelAdmin):
+  gutenberg = forms.CharField(max_length=10,
+                              label='Айди книги',
+                              required=False)
+  class Meta:
+    model = Book
+    fields = '__all__'
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -20,6 +31,7 @@ class PostAdmin(admin.ModelAdmin):
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
+  form = BookAdminForm
   list_display = ['book_title', 'book_author', 'book_publish', 'book_status', 'book_slug']
   list_filter = ['book_author', 'book_publish', 'book_created', 'isbn', 'book_age']
   search_fields = ['book_title', 'book_body']
@@ -64,5 +76,6 @@ class RatingAdmin(admin.ModelAdmin):
 class AuthorAdmin(admin.ModelAdmin):
   pass
 
-
-
+@admin.register
+class EditProfileAdmin(admin.ModelAdmin):
+  pass
