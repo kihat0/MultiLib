@@ -2,12 +2,14 @@ from django.shortcuts import render, redirect
 from .models import Post
 from .models import Book
 from .models import UserBook
+from .models import Edit_Profile
 from .models import Rating
-from .forms import UserBookForm
+from .forms import UserBookForm, ProfileForm, UserEditForm
 from django.urls import reverse
 from django.http import Http404
 from django.db.models import Avg
 from django.db.models.functions import Coalesce
+from django.contrib.auth.decorators import login_required
 
 def post_list(request):
     posts = Post.published.all()
@@ -49,3 +51,23 @@ def add_book(request):
     
 def index(request):
     return render(request, 'blog/Main_Page/index.html')
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('blog/profile.html')
+    else:
+        user_form = UserEditForm(instance=request.user)
+        try:
+            profile_form = ProfileForm(instance=request.user.profile)
+        except Edit_Profile.DoesNotExist:
+            profile = Edit_Profile.objects.create(user=request.user)
+            profile_form = ProfileForm(instance=profile)
+    return render(request, 'blog/profile.html',
+                  {'user_form': user_form,
+                   'profile_form': profile_form})
