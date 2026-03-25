@@ -53,7 +53,7 @@ class Author(models.Model):
     author_mid_name = models.CharField(max_length=40, verbose_name='Фамилия автора')
     author_last_name = models.CharField(max_length=40, verbose_name='Отчество автора')
     author_biography = models.TextField(verbose_name='Биография автора')
-    author_image = models.ImageField('cover/', blank=True, null=True)
+    author_image = models.ImageField(upload_to='blog/cover', blank=True, null=True)
     date_of_birth = models.DateField(null=True, verbose_name='Дата рождения')
     date_of_death = models.DateField(null=True, verbose_name='Дата смерти')
 
@@ -73,19 +73,20 @@ class Book(models.Model):
         PUBLISHED = 'PB', 'Опубликовано'
     book_title = models.CharField(max_length=150, db_index=True, verbose_name='Название книги')
     book_slug = models.SlugField(max_length=150, db_index=True, verbose_name='Метка книги')
+    book_id = models.IntegerField(unique=True, null=True, blank=True, verbose_name='ID')
     book_author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='blog_books', db_index=True, verbose_name='Автор книги', null=True, default=None)
     book_status = models.CharField(max_length=2, choices=BookStatus.choices, default=BookStatus.PUBLISHED, verbose_name='Статус')
     book_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     book_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     book_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    book_cover = models.ImageField('cover/', blank=True, null=True)
+    book_cover = models.ImageField(upload_to='blog/cover', blank=True, null=True)
     book_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     book_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     book_description = models.TextField(verbose_name='Описание книги')
     book_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     book_genre = models.ManyToManyField('Genre', related_name='GenrA', verbose_name='Жанр')
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, verbose_name='ISBN')
-    book_published = PublishedManagerBook()
+    #book_published = PublishedManagerBook()
 
     class Meta:
         ordering = ['-book_publish']
@@ -110,7 +111,7 @@ class UserBook(models.Model):
     user_book_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     user_book_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     user_book_status = models.CharField(max_length=2, choices=UserBookStatus.choices, default=UserBookStatus.DRAFT, verbose_name='Статус')
-    user_book_cover = models.ImageField('cover/', blank=True, null=True)
+    user_book_cover = models.ImageField(upload_to='blog/cover', blank=True, null=True)
     user_book_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     user_book_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     user_book_description = models.TextField(verbose_name='Описание книги')
@@ -200,9 +201,10 @@ class Commentary_Book_Write(models.Model):
         return f'Комментарий от {self.comment_user_book_author}'
     
 class Edit_Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     nickname = models.CharField(max_length=30, verbose_name='Никнейм')
-    avatar = models.ImageField('cover/', blank=True, null=True, verbose_name='Сменить аватар')
+    avatar = models.ImageField(upload_to='blog/avatars', blank=True, null=True)
     birthday = models.DateField(auto_now_add=True, verbose_name='Дата рождения')
-        
 
-
+    def __str__(self):
+        return self.user.username
