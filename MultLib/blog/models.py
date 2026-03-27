@@ -53,7 +53,7 @@ class Author(models.Model):
     author_mid_name = models.CharField(max_length=40, verbose_name='Фамилия автора')
     author_last_name = models.CharField(max_length=40, verbose_name='Отчество автора')
     author_biography = models.TextField(verbose_name='Биография автора')
-    author_image = models.ImageField(upload_to='blog/cover', blank=True, null=True)
+    author_image = models.ImageField(upload_to='cover/', blank=True, null=True)
     date_of_birth = models.DateField(null=True, verbose_name='Дата рождения')
     date_of_death = models.DateField(null=True, verbose_name='Дата смерти')
 
@@ -79,7 +79,7 @@ class Book(models.Model):
     book_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
     book_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     book_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
-    book_cover = models.ImageField(upload_to='blog/cover', blank=True, null=True)
+    book_cover = models.ImageField(upload_to='cover/', blank=True, null=True)
     book_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     book_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     book_description = models.TextField(verbose_name='Описание книги')
@@ -112,7 +112,7 @@ class UserBook(models.Model):
     user_book_created = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
     user_book_update = models.DateTimeField(auto_now=True, verbose_name='Дата изменения')
     user_book_status = models.CharField(max_length=2, choices=UserBookStatus.choices, default=UserBookStatus.DRAFT, verbose_name='Статус')
-    user_book_cover = models.ImageField(upload_to='blog/cover', blank=True, null=True)
+    user_book_cover = models.ImageField(upload_to='cover/', blank=True, null=True)
     user_book_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     user_book_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
     user_book_description = models.TextField(max_length=2000, verbose_name='Описание книги')
@@ -212,7 +212,7 @@ class Commentary_Book_Write(models.Model):
 class Edit_Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     nickname = models.CharField(max_length=30, verbose_name='Никнейм')
-    avatar = models.ImageField(upload_to='blog/avatars', blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     birthday = models.DateField(auto_now_add=True, verbose_name='Дата рождения')
 
     def __str__(self):
