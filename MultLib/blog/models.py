@@ -85,6 +85,7 @@ class Book(models.Model):
     book_description = models.TextField(verbose_name='Описание книги')
     book_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     book_genre = models.ManyToManyField('Genre', related_name='GenrA', verbose_name='Жанр')
+    book_raiting = models.OneToOneField(Rating, on_delete=models.SET_NULL, null=True, blank=True)
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, verbose_name='ISBN')
     #book_published = PublishedManagerBook()
 
@@ -103,8 +104,8 @@ class UserBook(models.Model):
     class UserBookStatus(models.TextChoices):
         DRAFT = 'DF', 'Черновик'
         PUBLISHED = 'PB', 'Опубликовано'
-    user_book_title = models.CharField(max_length=100, db_index=True, verbose_name='Название книги')
-    user_book_slug = models.SlugField(max_length=100, db_index=True, verbose_name='Метка книги')
+    user_book_title = models.CharField(max_length=200, db_index=True, verbose_name='Название книги')
+    user_book_slug = models.SlugField(max_length=200, db_index=True, verbose_name='Метка книги')
     user_book_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_user_books', db_index=True, verbose_name='Автор книги')
     user_book_body = models.TextField(verbose_name='Содержание книги')
     user_book_publish = models.DateTimeField(default=timezone.now, verbose_name='Дата публикации')
@@ -114,7 +115,7 @@ class UserBook(models.Model):
     user_book_cover = models.ImageField(upload_to='blog/cover', blank=True, null=True)
     user_book_pages = models.PositiveIntegerField(verbose_name='Количество страниц', default=0)
     user_book_language = models.CharField(max_length=35, default='Русский', verbose_name='Язык')
-    user_book_description = models.TextField(verbose_name='Описание книги')
+    user_book_description = models.TextField(max_length=2000, verbose_name='Описание книги')
     user_book_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     user_book_genre = models.ManyToManyField('Genre', related_name='GenrU', verbose_name='Жанр')
     user_book_published = PublishedManagerUserBook()
@@ -133,15 +134,23 @@ class UserBook(models.Model):
 
 
 class Rating(models.Model):
+    CHOICES = [
+        (1, '1 - плохо'),
+        (2, '2 - не очень'),
+        (3, '3 - сойдет'),
+        (4, '4 - хорошо'),
+        (5, '5 - отлично')
+    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rate')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='book_rating')
-    rating = models.PositiveSmallIntegerField(verbose_name='Рейтинг')
+    avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    rating = models.PositiveSmallIntegerField(choices=CHOICES)
 
     class Meta:
         unique_together = ('book', 'user')
 
     def __str__(self):
-        return f'{self.book.book_title}: {self.rating}'
+        return f'{self.user.username}: {self.book.book_title}: {self.rating}'
     
     
 class Genre(models.Model):
