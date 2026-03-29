@@ -1,0 +1,39 @@
+.container {
+margin: 50px auto;
+max-width: 1380px;
+}
+
+.book {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 40px;
+}
+
+.book .book__item {
+display: inline-block;
+background: #fff;
+width: 180px;
+height: 280px;
+border-radius: 10px;
+}
+
+.new {
+display: flex;
+align-items: center;
+}
+
+.genres{
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 40px;
+}
+
+.genres .genres__item {
+background: #fff;
+width: 250px;
+height: 175px;
+border-radius: 20px;
+gap: 20px;
+}
