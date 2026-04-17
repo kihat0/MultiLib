@@ -1,15 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
-from .models import Book
+from .models import Book, BookManager
 from .models import UserBook
 from .models import Rating
 from .models import Edit_Profile
 from .forms import UserBookForm, ProfileForm, UserEditForm, RatingForm, CreateUserForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse
 from django.http import Http404
 from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 from django.contrib.auth import login
 
 def post_list(request):
@@ -26,16 +32,16 @@ def book_list(request):
 
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
-    book_raiting = Book.book_raiting.all()
-    count = book_raiting.count()
+    book_ratings = book.ratings.all()
+    count = book_ratings.count()
     if count > 0:
-        avg = sum(Rating.rating for rating in book_raiting) / count
+        avg = sum(rating.rating for rating in book_ratings) / count
     else:
         avg = 0
 
     user_rating = None
     if request.user.is_authenticated:
-        user_rating = Book.book_raiting.filter(user=request.user).first()
+        user_rating = book.ratings.filter(user=request.user).first()
     cont = {
         'book': book,
         'user_rating': user_rating,
@@ -66,7 +72,12 @@ def add_book(request):
         #return redirect(reverse('add_book'))
     
 def index(request):
-    return render(request, 'blog/Main_Page/index.html')
+    content = {
+        'new_books': Book.objects.new_books(),
+        #'popular': Book.objects.popular()
+
+    }
+    return render(request, 'blog/Main_Page/index.html', content)
 
 @login_required
 def edit_profile(request):
@@ -76,7 +87,7 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('blog/profile.html')
+            return redirect('blog/Profile/profile.html')
     else:
         user_form = UserEditForm(instance=request.user)
         try:
@@ -84,7 +95,7 @@ def edit_profile(request):
         except Edit_Profile.DoesNotExist:
             profile = Edit_Profile.objects.create(user=request.user)
             profile_form = ProfileForm(instance=profile)
-    return render(request, 'blog/profile.html',
+    return render(request, 'blog/Profile/profile.html',
                   {'user_form': user_form,
                    'profile_form': profile_form})
     
@@ -100,6 +111,12 @@ def search_books(request):
         ).distinct()
 
     return render(request, 'blog/search_res.html', {'books': books, 'query':query})
+
+def search_results(request, book_id):
+    search_res = get_object_or_404(Book, id=book_id)
+    content = {'result': search_res}
+
+    return render(request, 'blog/search_res.html', content,)
 
 @login_required
 def add_rating(request, book_id):
@@ -135,8 +152,42 @@ def registr(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            #из формы
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            #файл письма
+            htmly = get_template('blog/email/email_reg.html')
+            d = {'username': username}
+            html_content = htmly.render(d)
+            #отправляем письмо
+            subject = 'Добро пожаловать!'
+            from_email = 'ml.multilib@gmail.com'
+            to = [email]
+            msg = EmailMultiAlternatives(subject=subject, body='', from_email=from_email, to=to)
+            msg.attach_alternative(html_content, 'text/html')
+            msg.send()
+            messages.success(request, f'Вы были зарегистрированы! У вас получилось!')
             return redirect('index')
+        else:
+            return render(request, 'blog/register/reg.html', {'form': form})
     else:
         form = CreateUserForm()
+        return render(request, 'blog/register/reg.html', {'form': form})
+
+def Login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, f'Приветствуем, {username}!')
+            redirect('index')
+
+        else:
+            messages.info(request, f'Кажется, такого аккаунта нет! Попробуйте снова.')
+    form = AuthenticationForm()
     return render(request, 'blog/Main_Page/index.html', {'form': form})
+
+def error(request):
+    return render(request, 'blog/error.html')
