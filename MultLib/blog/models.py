@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(status=Post.Status.PUBLISHED)
@@ -21,6 +22,14 @@ class PublishedManagerCommentToBook(models.Manager):
 class PublishedManagerCommentToUserBook(models.Manager):
     def get_queryset_comment_user_book(self):
         return super().get_queryset().filter(status=Commentary_Book_Write.comment_user_book_status)
+    
+class BookManager(models.Manager):
+   # def popular(self):
+        #return (self.get_queryset().filter(avg_rating__gte=4.0).order_by('-avg_rating')[:10])
+    
+    def new_books(self):
+        time_ago = timezone.now() - timezone.timedelta(days=30)
+        return (self.get_queryset().filter(book_publish__gte=time_ago).order_by('-book_publish')[:5])
 
 class Post(models.Model):
     class Status(models.TextChoices):
@@ -85,9 +94,9 @@ class Book(models.Model):
     book_description = models.TextField(verbose_name='Описание книги')
     book_age = models.PositiveIntegerField(verbose_name='Возрастное ограничение', default=0)
     book_genre = models.ManyToManyField('Genre', related_name='GenrA', verbose_name='Жанр')
-    book_raiting = models.OneToOneField(Rating, on_delete=models.SET_NULL, null=True, blank=True)
+    #book_ratings = models.OneToOneField('Rating', on_delete=models.SET_NULL, null=True, blank=True, related_name='books')
     isbn = models.CharField(max_length=17, blank=True, null=True, unique=True, verbose_name='ISBN')
-    #book_published = PublishedManagerBook()
+    objects = BookManager()
 
     class Meta:
         ordering = ['-book_publish']
@@ -131,26 +140,6 @@ class UserBook(models.Model):
         
     def __str__(self):
         return self.user_book_title
-
-
-class Rating(models.Model):
-    CHOICES = [
-        (1, '1 - плохо'),
-        (2, '2 - не очень'),
-        (3, '3 - сойдет'),
-        (4, '4 - хорошо'),
-        (5, '5 - отлично')
-    ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rate')
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='book_rating')
-    avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
-    rating = models.PositiveSmallIntegerField(choices=CHOICES)
-
-    class Meta:
-        unique_together = ('book', 'user')
-
-    def __str__(self):
-        return f'{self.user.username}: {self.book.book_title}: {self.rating}'
     
     
 class Genre(models.Model):
@@ -166,6 +155,25 @@ class Genre(models.Model):
 
     def __str__(self):
         return self.genre_title
+    
+class Rating(models.Model):
+    CHOICES = [
+        (1, '1 - плохо'),
+        (2, '2 - не очень'),
+        (3, '3 - сойдет'),
+        (4, '4 - хорошо'),
+        (5, '5 - отлично')
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_rate')
+    book = models.ForeignKey('Book', on_delete=models.CASCADE, related_name='ratings')
+    avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    rating = models.PositiveSmallIntegerField(choices=CHOICES)
+
+    class Meta:
+        unique_together = ('book', 'user')
+
+    def __str__(self):
+        return f'{self.user.username}: {self.book.book_title}: {self.rating}'
     
 
 class Commentary_Book(models.Model):
