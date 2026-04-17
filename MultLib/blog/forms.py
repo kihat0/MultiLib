@@ -135,27 +135,35 @@ class UserEditForm(forms.ModelForm):
         fields = ('username',)
 
 class CreateUserForm(UserCreationForm):
-    email = {'email': forms.EmailField(required=True)}
-    conf_pass = {'conf_pass': forms.CharField(widget=forms.PasswordInput(),
-                                              label='Подтвердите пароль',
-                                              required=True)}
+    email = forms.EmailField(required=True, 
+                             widget=forms.EmailInput(attrs={'class': 'form-control',
+                                                    'placeholder': 'Введите электронную почту...'}))
+    
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'conf_pass', 'log_in')
-        def check_pass2(self):
-            password1 = self.cleaned_data.get('password1')
-            conf_pass = self.cleaned_data.get('conf_pass')
-            if password1 != conf_pass:
-                raise forms.ValidationError('Пароли не совпадают!')
-            return conf_pass
+        fields = ('email', 'password1', 'password2', 'username')
+        widget = {'username': forms.TextInput(attrs={'class': 'form-control',
+                                                    'placeholder': 'Введите имя пользователя...',
+                                                    'max_length': '30'}),
+                  'password1': forms.PasswordInput(attrs={'class': 'form-control',
+                                                    'placeholder': 'Придумайте пароль...'})
+                }
+                                                    
+    def check_pass2(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get('password1')
+        password2 = cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError('Пароли не совпадают!')
+        return cleaned_data
         
-        def save_user(self, commit=True):
-            user = super().save(commit=False)
-            user.email = self.cleaned_data['email']
-            if commit:
-                user.save()
-            return user
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data.get('email')
+        if commit:
+            user.save()
+        return user
 
 
         
