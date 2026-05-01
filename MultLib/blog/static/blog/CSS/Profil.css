@@ -1,0 +1,39 @@
+.banner {
+    margin: 20px auto;
+    background-color: aqua;
+    width: 1650px;
+    height: 170px;
+}
+
+
+.container_nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 60px 40px;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    background-image: url();
+    width: 385px;
+    height: 520px;
+    border-radius: 35px;
+    background-color: blueviolet;
+    padding: 0 50px;
+    box-shadow: 0 0 20px 20px #7e3578;
+}
+
+.nav a {
+    margin: 21px 0;
+    font-size: 26px;
+}
+
+.nav_properties {
+    display: flex;
+    width: 830px;
+    height: 520px;
+    background-color: blueviolet;
+    border-radius: 35px;
+    box-shadow: 0 0 20px 20px #7e3578;
+}
