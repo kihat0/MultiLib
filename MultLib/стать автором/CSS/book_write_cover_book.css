@@ -1,0 +1,32 @@
+.container_book_write {
+    display: flex;
+    justify-items: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px 0;
+    margin: 70px;
+}
+
+.stages {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 715px;
+    height: 43px;
+    background-color: #ffffff;
+    border-radius: 50px;
+    border: 8px solid purple;
+}
+
+.stages a {
+    font-size: 18px;
+    line-height:20px ;
+    color: black;
+}
+
+.name_book_selected {
+    width: 715px;
+    height: 43px;
+    border-radius: 50px;
+    border: 8px solid purple;
+}
